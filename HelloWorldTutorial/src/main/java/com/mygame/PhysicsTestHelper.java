@@ -92,13 +92,17 @@ public class PhysicsTestHelper {
         Material wallMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         wallMaterial.setTexture("ColorMap", assetManager.loadTexture("Textures/stoneWall.jpg"));
         
-        Box floorBox = new Box(100, 0.25f, 100);
-        Geometry floorGeometry = new Geometry("Floor", floorBox);
-        floorGeometry.setMaterial(floorMaterial);
-        floorGeometry.setLocalTranslation(0, -0.25f, 0);
-        floorGeometry.addControl(new RigidBodyControl(0));
-        rootNode.attachChild(floorGeometry);
-        space.add(floorGeometry);
+        for (int i = -5; i <= 5; i++) {
+            for (int j = -5; j <= 5; j++) {
+                Box floorBox = new Box(1, 0.25f, 1);
+                Geometry floorGeometry = new Geometry("Floor", floorBox);
+                floorGeometry.setMaterial(floorMaterial);
+                floorGeometry.setLocalTranslation((i*2), -0.25f, (j*2));
+                floorGeometry.addControl(new RigidBodyControl(0));
+                rootNode.attachChild(floorGeometry);
+                space.add(floorGeometry);
+            }
+        }
 
         for (int i = 1; i <= 100; i++){
             //immovable Box with mesh collision shape
