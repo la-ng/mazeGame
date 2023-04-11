@@ -92,8 +92,9 @@ public class PhysicsTestHelper {
         Material wallMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         wallMaterial.setTexture("ColorMap", assetManager.loadTexture("Textures/stoneWall.jpg"));
         
-        for (int i = -5; i <= 5; i++) {
-            for (int j = -5; j <= 5; j++) {
+        //floor
+        for (int i = -25; i <= 25; i++) {
+            for (int j = -25; j <= 25; j++) {
                 Box floorBox = new Box(1, 0.25f, 1);
                 Geometry floorGeometry = new Geometry("Floor", floorBox);
                 floorGeometry.setMaterial(floorMaterial);
@@ -103,149 +104,61 @@ public class PhysicsTestHelper {
                 space.add(floorGeometry);
             }
         }
-
-        for (int i = 1; i <= 100; i++){
-            //immovable Box with mesh collision shape
-            Box box = new Box(1, 1, 1);
-            Geometry boxGeometry = new Geometry("Box", box);
-            boxGeometry.setMaterial(wallMaterial);
-            boxGeometry.setLocalTranslation((i*2f), 1, 2);
-            boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
-            rootNode.attachChild(boxGeometry);
-            space.add(boxGeometry);
-        }
-    }
-
-    /**
-     * creates a box geometry with a RigidBodyControl
-     *
-     * @param assetManager for loading assets
-     * @return a new Geometry
-     */
-    /**
-     * creates an empty node with a RigidBodyControl
-     *
-     * @param manager for loading assets
-     * @param shape a shape for the collision object
-     * @param mass a mass for rigid body
-     * @return a new Node
-     */
-    public static Node createPhysicsTestNode(AssetManager manager, CollisionShape shape, float mass) {
-        Node node = new Node("PhysicsNode");
-        RigidBodyControl control = new RigidBodyControl(shape, mass);
-        node.addControl(control);
-        return node;
-    }
-
-    /**
-     * Creates a curved "floor" with a GImpactCollisionShape provided as the RigidBodyControl's collision
-     * shape. Surface has four slightly concave corners to allow for multiple tests and minimize falling off
-     * the edge of the floor.
-     *
-     * @param assetManager for loading assets
-     * @param floorDimensions width/depth of the "floor" (X/Z)
-     * @param position sets the floor's local translation
-     * @return a new Geometry
-     */
-    public static Geometry createGImpactTestFloor(AssetManager assetManager, float floorDimensions, Vector3f position) {
-        Geometry floor = createTestFloor(assetManager, floorDimensions, position, ColorRGBA.Red);
-        RigidBodyControl floorControl = new RigidBodyControl(new GImpactCollisionShape(floor.getMesh()), 0);
-        floor.addControl(floorControl);
-        return floor;
-    }
-
-    /**
-     * Creates a curved "floor" with a MeshCollisionShape provided as the RigidBodyControl's collision shape.
-     * Surface has four slightly concave corners to allow for multiple tests and minimize falling off the edge
-     * of the floor.
-     *
-     * @param assetManager for loading assets
-     * @param floorDimensions width/depth of the "floor" (X/Z)
-     * @param position sets the floor's local translation
-     * @return a new Geometry
-     */
-    public static Geometry createMeshTestFloor(AssetManager assetManager, float floorDimensions, Vector3f position) {
-        Geometry floor = createTestFloor(assetManager, floorDimensions, position, new ColorRGBA(0.5f, 0.5f, 0.9f, 1));
-        RigidBodyControl floorControl = new RigidBodyControl(new MeshCollisionShape(floor.getMesh()), 0);
-        floor.addControl(floorControl);
-        return floor;
-    }
-
-    private static Geometry createTestFloor(AssetManager assetManager, float floorDimensions, Vector3f position, ColorRGBA color) {
-        Geometry floor = new Geometry("floor", createFloorMesh(20, floorDimensions));
-        Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        material.getAdditionalRenderState().setWireframe(true);
-        material.setColor("Color", color);
-        floor.setMaterial(material);
-        floor.setLocalTranslation(position);
-        return floor;
-    }
-
-    private static Mesh createFloorMesh(int meshDetail, float floorDimensions) {
-        if (meshDetail < 10) {
-            meshDetail = 10;
-        }
-        int numVertices = meshDetail * meshDetail * 2 * 3;//width * depth * two tris * 3 verts per tri
-
-        int[] indexBuf = new int[numVertices];
-        int i = 0;
-        for (int x = 0; x < meshDetail; x++) {
-            for (int z = 0; z < meshDetail; z++) {
-                indexBuf[i] = i++;
-                indexBuf[i] = i++;
-                indexBuf[i] = i++;
-                indexBuf[i] = i++;
-                indexBuf[i] = i++;
-                indexBuf[i] = i++;
+        
+        //ceiling
+        for (int i = -25; i <= 25; i++) {
+            for (int j = -25; j <= 25; j++) {
+                Box floorBox = new Box(1, 0.25f, 1);
+                Geometry floorGeometry = new Geometry("Floor", floorBox);
+                floorGeometry.setMaterial(floorMaterial);
+                floorGeometry.setLocalTranslation((i*2), 5.25f, (j*2));
+                floorGeometry.addControl(new RigidBodyControl(0));
+                rootNode.attachChild(floorGeometry);
+                space.add(floorGeometry);
             }
         }
-
-        float[] vertBuf = new float[numVertices * 3];
-        float xIncrement = floorDimensions / meshDetail;
-        float zIncrement = floorDimensions / meshDetail;
-        int j = 0;
-        for (int x = 0; x < meshDetail; x++) {
-            float xPos = x * xIncrement;
-            for (int z = 0; z < meshDetail; z++) {
-                float zPos = z * zIncrement;
-                //First tri
-                vertBuf[j++] = xPos;
-                vertBuf[j++] = getY(xPos, zPos, floorDimensions);
-                vertBuf[j++] = zPos;
-                vertBuf[j++] = xPos;
-                vertBuf[j++] = getY(xPos, zPos + zIncrement, floorDimensions);
-                vertBuf[j++] = zPos + zIncrement;
-                vertBuf[j++] = xPos + xIncrement;
-                vertBuf[j++] = getY(xPos + xIncrement, zPos, floorDimensions);
-                vertBuf[j++] = zPos;
-                //Second tri
-                vertBuf[j++] = xPos;
-                vertBuf[j++] = getY(xPos, zPos + zIncrement, floorDimensions);
-                vertBuf[j++] = zPos + zIncrement;
-                vertBuf[j++] = xPos + xIncrement;
-                vertBuf[j++] = getY(xPos + xIncrement, zPos + zIncrement, floorDimensions);
-                vertBuf[j++] = zPos + zIncrement;
-                vertBuf[j++] = xPos + xIncrement;
-                vertBuf[j++] = getY(xPos + xIncrement, zPos, floorDimensions);
-                vertBuf[j++] = zPos;
+        
+        //walls
+        for (int j = 0; j <= 2; j++) {
+            for (int i = -25; i <= 25; i++){
+                Box box = new Box(1, 1, 1);
+                Geometry boxGeometry = new Geometry("Box", box);
+                boxGeometry.setMaterial(wallMaterial);
+                boxGeometry.setLocalTranslation((i*2f), (1+j*2f) , -50f);
+                boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
+                rootNode.attachChild(boxGeometry);
+                space.add(boxGeometry);
+            }
+            for (int i = -25; i <= 25; i++){
+                //immovable Box with mesh collision shape
+                Box box = new Box(1, 1, 1);
+                Geometry boxGeometry = new Geometry("Box", box);
+                boxGeometry.setMaterial(wallMaterial);
+                boxGeometry.setLocalTranslation((i*2f), (1+j*2f), 50f);
+                boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
+                rootNode.attachChild(boxGeometry);
+                space.add(boxGeometry);
+            }
+            for (int i = -25; i <= 25; i++){
+                //immovable Box with mesh collision shape
+                Box box = new Box(1, 1, 1);
+                Geometry boxGeometry = new Geometry("Box", box);
+                boxGeometry.setMaterial(wallMaterial);
+                boxGeometry.setLocalTranslation(-50f, (1+j*2f), (i*2));
+                boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
+                rootNode.attachChild(boxGeometry);
+                space.add(boxGeometry);
+            }
+            for (int i = -25; i <= 25; i++){
+                //immovable Box with mesh collision shape
+                Box box = new Box(1, 1, 1);
+                Geometry boxGeometry = new Geometry("Box", box);
+                boxGeometry.setMaterial(wallMaterial);
+                boxGeometry.setLocalTranslation(50f, (1+j*2f), (i*2));
+                boxGeometry.addControl(new RigidBodyControl(new MeshCollisionShape(box), 0));
+                rootNode.attachChild(boxGeometry);
+                space.add(boxGeometry);
             }
         }
-
-        Mesh m = new Mesh();
-        m.setBuffer(VertexBuffer.Type.Index, 1, BufferUtils.createIntBuffer(indexBuf));
-        m.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(vertBuf));
-        m.updateBound();
-        return m;
-    }
-
-    private static float getY(float x, float z, float max) {
-        float yMaxHeight = 8;
-        float xv = FastMath.unInterpolateLinear(FastMath.abs(x - (max / 2)), 0, max) * FastMath.TWO_PI;
-        float zv = FastMath.unInterpolateLinear(FastMath.abs(z - (max / 2)), 0, max) * FastMath.TWO_PI;
-
-        float xComp = (FastMath.sin(xv) + 1) * 0.5f;
-        float zComp = (FastMath.sin(zv) + 1) * 0.5f;
-
-        return -yMaxHeight * xComp * zComp;
     }
 }
