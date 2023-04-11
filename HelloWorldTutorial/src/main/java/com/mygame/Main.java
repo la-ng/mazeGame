@@ -43,11 +43,9 @@ public class Main extends SimpleApplication implements ActionListener {
                 new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Walk Backward", 
                 new KeyTrigger(KeyInput.KEY_S));
-        inputManager.addMapping("Jump", 
-                new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener(this, "Strafe Left", "Strafe Right");
         inputManager.addListener(this, "Walk Forward", "Walk Backward");
-        inputManager.addListener(this, "Jump", "Shoot");
+        inputManager.addListener(this, "Jump", "Hmm");
     }
   @Override
   public void simpleInitApp() {
@@ -56,12 +54,12 @@ public class Main extends SimpleApplication implements ActionListener {
     stateManager.attach(bulletAppState);
 
     // init a physical test scene
-    PhysicsTestHelper.createPhysicsTestWorldSoccer(rootNode, assetManager, bulletAppState.getPhysicsSpace());
+    PhysicsTestHelper.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace());
     setupKeys();
 
     // Add a physics character to the world
     physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.5f, 1f), .1f);
-    physicsCharacter.setPhysicsLocation(new Vector3f(0, 1, 0));
+    physicsCharacter.setPhysicsLocation(new Vector3f(0, 0, 0));
     Node characterNode = new Node("character node");
     characterNode.addControl(physicsCharacter);
     getPhysicsSpace().add(physicsCharacter);
@@ -79,8 +77,6 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleUpdate(float tpf) {
         Vector3f camDir = cam.getDirection().mult(0.2f);
         Vector3f camLeft = cam.getLeft().mult(0.2f);
-        camDir.y = 0;
-        camLeft.y = 0;
         viewDirection.set(camDir);
         walkDirection.set(0, 0, 0);
         if (leftStrafe) {
@@ -125,8 +121,6 @@ public class Main extends SimpleApplication implements ActionListener {
             } else {
                 backward = false;
             }
-        } else if (binding.equals("Jump")) {
-            physicsCharacter.jump();
         }
     }
 
