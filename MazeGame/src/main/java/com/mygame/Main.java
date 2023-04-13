@@ -13,10 +13,10 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
-//import com.simsilica.lemur.Button;
-//import com.simsilica.lemur.Command;
-//import com.simsilica.lemur.Container;
-//import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
+import com.simsilica.lemur.Container;
+import com.simsilica.lemur.GuiGlobals;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -50,6 +50,8 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.addListener(this, "Strafe Left", "Strafe Right");
         inputManager.addListener(this, "Walk Forward", "Walk Backward");
         inputManager.addListener(this, "Jump");
+        
+        inputManager.setCursorVisible(false);
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -57,6 +59,8 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     private void startGame() {
+        gameRunning = true;
+        
         // activate physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
@@ -80,36 +84,33 @@ public class Main extends SimpleApplication implements ActionListener {
         characterNode.attachChild(camNode);
     }
     
-//    private void startMenu() {
-//        // Initialize the globals access so that the defualt
-//        // components can find what they need.
-//        GuiGlobals.initialize(this);
-//    
-//        // Create a simple container for our elements
-//        Container myWindow = new Container();
-//        guiNode.attachChild(myWindow);
-//            
-//        // Put it somewhere that we will see it
-//        // Note: Lemur GUI elements grow down from the upper left corner.
-//        myWindow.setLocalTranslation(300, 300, 0);
-//        
-//        Button clickMe = myWindow.addChild(new Button("Start Maze"));
-//        clickMe.addClickCommands(new Command<Button>() {
-//            @Override
-//            public void execute( Button source ) {
-//                //flyCam.setEnabled(false);
-//                gameRunning = true;
-//                source.removeFromParent();
-//                startGame();
-//            }
-//        });
-//    }
+    private void startMenu() {
+        // Initialize the globals access so that the defualt
+        // components can find what they need.
+        GuiGlobals.initialize(this);
+    
+        // Create a simple container for our elements
+        Container myWindow = new Container();
+        guiNode.attachChild(myWindow);
+            
+        // Put it somewhere that we will see it
+        // Note: Lemur GUI elements grow down from the upper left corner.
+        myWindow.setLocalTranslation(300, 300, 0);
+        
+        Button clickMe = myWindow.addChild(new Button("Start Maze"));
+        clickMe.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                startGame();
+                guiNode.detachChild(myWindow);
+            }
+        });
+    }
 
     @Override
     public void simpleInitApp() {
-        //startMenu();
-        gameRunning = true;
-        startGame();
+        startMenu();
+        //startGame();
     }
     
     @Override
