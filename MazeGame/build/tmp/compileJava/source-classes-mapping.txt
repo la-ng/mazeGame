@@ -1,0 +1,4 @@
+com/mygame/Main.java
+ com.mygame.Main
+com/mygame/Maze.java
+ com.mygame.Maze
