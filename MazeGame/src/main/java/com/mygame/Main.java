@@ -21,6 +21,7 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Insets3f;
+import com.simsilica.lemur.Label;
 import com.simsilica.lemur.component.IconComponent;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 
@@ -114,7 +115,12 @@ public class Main extends SimpleApplication implements ActionListener {
         // Put it somewhere that we will see it
         // Note: Lemur GUI elements grow down from the upper left corner.
         Vector3f pref = myWindow.getPreferredSize().mult(0.5f);
-        myWindow.setLocalTranslation(settings.getWidth() * 0.5f - 10f * pref.x, settings.getHeight() * 0.6f + pref.y, 0);
+        myWindow.setLocalTranslation(settings.getWidth() * 0.5f - 26f * pref.x, settings.getHeight() * 0.7f + pref.y, 0);
+        
+        IconComponent iconLogo = new IconComponent("Icons/mazegame_logo.png", 1f, 0, 0, 0, paused);
+        Label labelLogo = myWindow.addChild(new Label(""));
+        labelLogo.setInsets(new Insets3f(0, 0, 50f, 0));
+        labelLogo.setIcon(iconLogo);
         
         Button buttonStartDeepslateMaze = myWindow.addChild(new Button("Start Deepslate Maze"));
         IconComponent iconDeepslate = new IconComponent("Icons/deepslate_ico.png", 0.20f, 0, -15, 0, paused);
