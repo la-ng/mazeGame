@@ -39,7 +39,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private boolean leftStrafe = false, rightStrafe = false, forward = false, backward = false;
     private boolean gameRunning = false;
     static Main app;
-    float[] coords = new float[4];
+    float[] coords = new float[4]; //brings back starting coords and finish coords
+    boolean restarted = false;
     
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
@@ -212,17 +213,23 @@ public class Main extends SimpleApplication implements ActionListener {
         physicsCharacter.setWalkDirection(walkDirection);
         physicsCharacter.setViewDirection(viewDirection);
         
-        //finish coordinates. currently stuck here rn
-        if ((cam.getLocation().x <= (coords[2] + 1.0f)) && (cam.getLocation().x >= (coords[2] - 1.0f))
-            && (cam.getLocation().z <= (coords[3] + 1.0f)) && (cam.getLocation().z >= (coords[3] - 1.0f))) {
-                gameRunning = false;
-                stateManager.detach(bulletAppState);
-                startMenu();
-        }
+        checkForFinish(coords);
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
+    }
+    
+    public void checkForFinish(float[] coords) {
+        //finish coordinates. currently stuck here rn
+        if ((physicsCharacter.getPhysicsLocation().x <= (coords[2] + 1.0f)) && (physicsCharacter.getPhysicsLocation().x >= (coords[2] - 1.0f))
+            && (physicsCharacter.getPhysicsLocation().z <= (coords[3] + 1.0f)) && (physicsCharacter.getPhysicsLocation().z >= (coords[3] - 1.0f))) {
+                gameRunning = false;
+                stateManager.cleanup();
+                physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
+                inputManager.clearMappings();
+                startMenu();
+        }
     }
 }

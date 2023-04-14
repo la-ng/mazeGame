@@ -50,9 +50,9 @@ public class Maze {
                         {1, 0, 0, 2, 0, 0, 1},
                         {1, 0, 0, 0, 0, 0, 1},
                         {1, 0, 0, 0, 0, 0, 1},
-                        {1, 1, 1, 0, 1, 1, 1},
-                        {1, 1, 1, 0, 1, 1, 1},
-                        {1, 1, 1, 0, 1, 1, 1},
+                        {1, 1, 0, 0, 0, 1, 1},
+                        {1, 1, 0, 0, 0, 1, 1},
+                        {1, 1, 0, 0, 0, 1, 1},
                         {1, 0, 0, 0, 0, 0, 1},
                         {1, 0, 0, 0, 0, 0, 1},
                         {1, 0, 0, 9, 0, 0, 1},
@@ -87,7 +87,7 @@ public class Maze {
                 }
             }
         }
-        return returnArray; //sends starting coordinates back to the 
+        return returnArray; //sends starting coordinates back to the main program
     }
     
     /*Here, I got tired of seeing the same chunk of code dozens of times. Made these methods to condense the lines.*/
