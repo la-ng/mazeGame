@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>assets</name>
-	<comment>Project assets created by Buildship.</comment>
+	<name>MazeGame-assets</name>
+	<comment>Project MazeGame-assets created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1681409521931</id>
+			<id>1681409521923</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
