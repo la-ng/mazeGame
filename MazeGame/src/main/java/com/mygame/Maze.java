@@ -55,36 +55,39 @@ public class Maze {
                         {1, 1, 1, 0, 1, 1, 1},
                         {1, 0, 0, 0, 0, 0, 1},
                         {1, 0, 0, 0, 0, 0, 1},
-                        {1, 0, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 9, 0, 0, 1},
                         {1, 0, 0, 0, 0, 0, 1},
                         {1, 0, 0, 0, 0, 0, 1},
                         {1, 1, 1, 1, 1, 1, 1}};
-        
-        //generate floor and ceiling
-        for (int j = 0; j < maze.length; j++) {
-            for (int i = 0; i < maze[j].length; i++) {
-                createFloor(rootNode, assetManager, space, floorMaterial, "floor", i, j);
-                createFloor(rootNode, assetManager, space, floorMaterial, "ceiling", i, j);
-            }
-        }
-        
-        float[] returnArray = new float[2];
+
+        float[] returnArray = new float[4];
         
         for (int j = 0; j < maze.length; j++) {
             for (int i = 0; i < maze[j].length; i++) {
                 if (maze[j][i] == 0) { //this is the floor, do nothing
+                    createFloor(rootNode, assetManager, space, floorMaterial, "floor", i, j);
+                    createFloor(rootNode, assetManager, space, floorMaterial, "ceiling", i, j);
                 }
                 else if (maze[j][i] == 1) { //this is a wall, actually do something
                     createWall(rootNode, assetManager, space, wallMaterial, i, j);
                 }
                 else if (maze[j][i] == 2) { //this is the starting location, spawn player here
                     //blocks are in multiples of 2 so gotta multiply it by that same amount
+                    createFloor(rootNode, assetManager, space, floorMaterial, "floor", i, j);
                     returnArray[0] = (float)i*2.0f;
                     returnArray[1] = (float)j*2.0f;
                 }
+                else if (maze[j][i] == 9) {
+                    Material floorFinishMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    floorFinishMaterial.setTexture("ColorMap", assetManager.loadTexture("Textures/finishBlock.png"));
+                    createFloor(rootNode, assetManager, space, floorFinishMaterial, "floor", i, j);
+                    createFloor(rootNode, assetManager, space, floorMaterial, "ceiling", i, j);
+                    returnArray[2] = (float)i*2.0f;
+                    returnArray[3] = (float)j*2.0f;
+                }
             }
         }
-        return returnArray;
+        return returnArray; //sends starting coordinates back to the 
     }
     
     /*Here, I got tired of seeing the same chunk of code dozens of times. Made these methods to condense the lines.*/

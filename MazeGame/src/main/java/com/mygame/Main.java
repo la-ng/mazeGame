@@ -38,13 +38,15 @@ public class Main extends SimpleApplication implements ActionListener {
     final private Vector3f viewDirection = new Vector3f(0,0,0);
     private boolean leftStrafe = false, rightStrafe = false, forward = false, backward = false;
     private boolean gameRunning = false;
+    static Main app;
+    float[] coords = new float[4];
     
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setTitle("Maze Game");
         settings.setResolution(1600, 900);
         
-        Main app = new Main();
+        app = new Main();
         app.setShowSettings(false);
         app.setSettings(settings);
         app.start();
@@ -78,23 +80,23 @@ public class Main extends SimpleApplication implements ActionListener {
         stateManager.attach(bulletAppState);
 
         // init a physical test scene
-        float[] startCoords = Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type);
+        coords = Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type);
         setupKeys();
 
         // Add a physics character to the world
         physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.5f, 1.8f), .1f);
-        physicsCharacter.setPhysicsLocation(new Vector3f(0, 1, 0));
+        physicsCharacter.setPhysicsLocation(new Vector3f(0, 1.0f, 0.0f));
         Node characterNode = new Node("character node");
         characterNode.addControl(physicsCharacter);
         getPhysicsSpace().add(physicsCharacter);
         rootNode.attachChild(characterNode);
         //teleports the player to a specific location, this is going to be EXTREMELY useful with starting locations
-        physicsCharacter.warp(new Vector3f(startCoords[0], 1.0f, startCoords[1]));
+        physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
 
         // set forward camera node that follows the character
         CameraNode camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0.0f, 1.0f, 0.0f));
+        camNode.setLocalTranslation(new Vector3f(0.0f, 1.0f,-1.0f));
         characterNode.attachChild(camNode);
     }
     
@@ -125,7 +127,7 @@ public class Main extends SimpleApplication implements ActionListener {
         Button buttonStartDeepslateMaze = myWindow.addChild(new Button("Start Deepslate Maze"));
         IconComponent iconDeepslate = new IconComponent("Icons/deepslate_ico.png", 0.20f, 0, -15, 0, paused);
         buttonStartDeepslateMaze.setIcon(iconDeepslate);
-        buttonStartDeepslateMaze.setInsets(new Insets3f(0, 0, 60f, 0));
+        buttonStartDeepslateMaze.setInsets(new Insets3f(0, 0, 50f, 0));
         buttonStartDeepslateMaze.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
@@ -136,7 +138,7 @@ public class Main extends SimpleApplication implements ActionListener {
         
         
         Button buttonStartStrongholdMaze = myWindow.addChild(new Button("Start Stronghold Maze"));
-        buttonStartStrongholdMaze.setInsets(new Insets3f(0, 0, 5f, 0));
+        buttonStartStrongholdMaze.setInsets(new Insets3f(0, 0, 25f, 0));
         IconComponent iconStronghold = new IconComponent("Icons/stonebricks_ico.png", 0.20f, 0, -15, 0, paused);
         buttonStartStrongholdMaze.setIcon(iconStronghold);
         buttonStartStrongholdMaze.addClickCommands(new Command<Button>() {
@@ -144,6 +146,15 @@ public class Main extends SimpleApplication implements ActionListener {
             public void execute( Button source ) {
                 startGame("Stronghold");
                 guiNode.detachChild(myWindow);
+            }
+        });
+        
+        Button buttonExit = myWindow.addChild(new Button("Exit Game"));
+        buttonExit.setInsets(new Insets3f(0, 0, 0f, 0));
+        buttonExit.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                app.stop();
             }
         });
     }
@@ -200,7 +211,14 @@ public class Main extends SimpleApplication implements ActionListener {
         
         physicsCharacter.setWalkDirection(walkDirection);
         physicsCharacter.setViewDirection(viewDirection);
-        System.out.println(cam.getLocation());
+        
+        //finish coordinates. currently stuck here rn
+        if ((cam.getLocation().x <= (coords[2] + 1.0f)) && (cam.getLocation().x >= (coords[2] - 1.0f))
+            && (cam.getLocation().z <= (coords[3] + 1.0f)) && (cam.getLocation().z >= (coords[3] - 1.0f))) {
+                gameRunning = false;
+                stateManager.detach(bulletAppState);
+                startMenu();
+        }
     }
 
     @Override
