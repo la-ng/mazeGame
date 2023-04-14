@@ -8,15 +8,18 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.system.AppSettings;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.component.QuadBackgroundComponent;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -33,8 +36,13 @@ public class Main extends SimpleApplication implements ActionListener {
     private boolean gameRunning = false;
     
     public static void main(String[] args) {
+        AppSettings settings = new AppSettings(true);
+        settings.setTitle("Maze Game");
+        settings.setResolution(1280, 720);
+        
         Main app = new Main();
         app.setShowSettings(false);
+        app.setSettings(settings);
         app.start();
     }
     
@@ -80,7 +88,7 @@ public class Main extends SimpleApplication implements ActionListener {
         // set forward camera node that follows the character
         CameraNode camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0, 0, -1.0f));
+        camNode.setLocalTranslation(new Vector3f(0, 1.0f, -1.0f));
         characterNode.attachChild(camNode);
     }
     
@@ -91,14 +99,20 @@ public class Main extends SimpleApplication implements ActionListener {
     
         // Create a simple container for our elements
         Container myWindow = new Container();
+        
+        QuadBackgroundComponent background = new QuadBackgroundComponent(ColorRGBA.DarkGray, 10, 20);
+
+        
+        myWindow.setBackground(background);
         guiNode.attachChild(myWindow);
             
         // Put it somewhere that we will see it
         // Note: Lemur GUI elements grow down from the upper left corner.
-        myWindow.setLocalTranslation(300, 300, 0);
+        Vector3f pref = myWindow.getPreferredSize().mult(0.5f);
+        myWindow.setLocalTranslation(settings.getWidth() * 0.5f - 4.5f * pref.x, settings.getHeight() * 0.6f + pref.y, 0);
         
-        Button clickMe = myWindow.addChild(new Button("Start Maze"));
-        clickMe.addClickCommands(new Command<Button>() {
+        Button buttonStartMaze = myWindow.addChild(new Button("Start Maze"));
+        buttonStartMaze.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
                 startGame();
@@ -110,7 +124,6 @@ public class Main extends SimpleApplication implements ActionListener {
     @Override
     public void simpleInitApp() {
         startMenu();
-        //startGame();
     }
     
     @Override
