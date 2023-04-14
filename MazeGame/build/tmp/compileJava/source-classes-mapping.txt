@@ -1,4 +1,7 @@
-com/mygame/Main.java
- com.mygame.Main
 com/mygame/Maze.java
  com.mygame.Maze
+com/mygame/Main.java
+ com.mygame.Main
+ com.mygame.Main$1
+ com.mygame.Main$2
+ com.mygame.Main$3
