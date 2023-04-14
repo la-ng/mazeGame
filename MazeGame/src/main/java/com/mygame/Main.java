@@ -9,6 +9,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
@@ -19,6 +20,8 @@ import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.Insets3f;
+import com.simsilica.lemur.component.IconComponent;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 
 /**
@@ -38,7 +41,7 @@ public class Main extends SimpleApplication implements ActionListener {
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setTitle("Maze Game");
-        settings.setResolution(1280, 720);
+        settings.setResolution(1600, 900);
         
         Main app = new Main();
         app.setShowSettings(false);
@@ -66,7 +69,7 @@ public class Main extends SimpleApplication implements ActionListener {
         return bulletAppState.getPhysicsSpace();
     }
     
-    private void startGame() {
+    private void startGame(String type) {
         gameRunning = true;
         
         // activate physics
@@ -74,7 +77,7 @@ public class Main extends SimpleApplication implements ActionListener {
         stateManager.attach(bulletAppState);
 
         // init a physical test scene
-        Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace());
+        Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type);
         setupKeys();
 
         // Add a physics character to the world
@@ -109,13 +112,29 @@ public class Main extends SimpleApplication implements ActionListener {
         // Put it somewhere that we will see it
         // Note: Lemur GUI elements grow down from the upper left corner.
         Vector3f pref = myWindow.getPreferredSize().mult(0.5f);
-        myWindow.setLocalTranslation(settings.getWidth() * 0.5f - 4.5f * pref.x, settings.getHeight() * 0.6f + pref.y, 0);
+        myWindow.setLocalTranslation(settings.getWidth() * 0.5f - 10f * pref.x, settings.getHeight() * 0.6f + pref.y, 0);
         
-        Button buttonStartMaze = myWindow.addChild(new Button("Start Maze"));
-        buttonStartMaze.addClickCommands(new Command<Button>() {
+        Button buttonStartDeepslateMaze = myWindow.addChild(new Button("Start Deepslate Maze"));
+        IconComponent iconDeepslate = new IconComponent("Icons/deepslate_ico.png", 0.20f, 0, -15, 0, paused);
+        buttonStartDeepslateMaze.setIcon(iconDeepslate);
+        buttonStartDeepslateMaze.setInsets(new Insets3f(0, 0, 60f, 0));
+        buttonStartDeepslateMaze.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                startGame();
+                startGame("Deepslate");
+                guiNode.detachChild(myWindow);
+            }
+        });
+        
+        
+        Button buttonStartStrongholdMaze = myWindow.addChild(new Button("Start Stronghold Maze"));
+        buttonStartStrongholdMaze.setInsets(new Insets3f(0, 0, 5f, 0));
+        IconComponent iconStronghold = new IconComponent("Icons/stonebricks_ico.png", 0.20f, 0, -15, 0, paused);
+        buttonStartStrongholdMaze.setIcon(iconStronghold);
+        buttonStartStrongholdMaze.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                startGame("Stronghold");
                 guiNode.detachChild(myWindow);
             }
         });
