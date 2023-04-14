@@ -8,8 +8,8 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
@@ -77,21 +77,23 @@ public class Main extends SimpleApplication implements ActionListener {
         stateManager.attach(bulletAppState);
 
         // init a physical test scene
-        Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type);
+        float[] startCoords = Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type);
         setupKeys();
 
         // Add a physics character to the world
-        physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.5f, 1f), .1f);
-        physicsCharacter.setPhysicsLocation(new Vector3f(0, 0, 0));
+        physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.5f, 1.8f), .1f);
+        physicsCharacter.setPhysicsLocation(new Vector3f(0, 1, 0));
         Node characterNode = new Node("character node");
         characterNode.addControl(physicsCharacter);
         getPhysicsSpace().add(physicsCharacter);
         rootNode.attachChild(characterNode);
+        //teleports the player to a specific location, this is going to be EXTREMELY useful with starting locations
+        physicsCharacter.warp(new Vector3f(startCoords[0], 1.0f, startCoords[1]));
 
         // set forward camera node that follows the character
         CameraNode camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0, 1.0f, -1.0f));
+        camNode.setLocalTranslation(new Vector3f(0.0f, 1.0f, 0.0f));
         characterNode.attachChild(camNode);
     }
     
@@ -192,6 +194,7 @@ public class Main extends SimpleApplication implements ActionListener {
         
         physicsCharacter.setWalkDirection(walkDirection);
         physicsCharacter.setViewDirection(viewDirection);
+        System.out.println(cam.getLocation());
     }
 
     @Override
@@ -199,4 +202,3 @@ public class Main extends SimpleApplication implements ActionListener {
         //TODO: add render code
     }
 }
-
