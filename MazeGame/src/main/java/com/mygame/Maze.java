@@ -4,7 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.light.PointLight;
+import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
@@ -24,24 +24,28 @@ public class Maze {
      * @param space where collision objects should be added
      */
 
-    public static float[] createWorld(Node rootNode, AssetManager assetManager, PhysicsSpace space, String type) {
+    public static float[] createWorld(Node rootNode, AssetManager assetManager, PhysicsSpace space, String type, AmbientLight ambientLight) {
         String floorTexturePath = "";
         String wallTexturePath = "";
         
         if (type.equals("Deepslate")) {
+            ambientLight.setColor(ColorRGBA.White.mult(0.5f));
             floorTexturePath = "Textures/stoneFloor.jpg";
             wallTexturePath = "Textures/stoneWall.jpg";
         }
         else if (type.equals("Stronghold")) {
+            ambientLight.setColor(ColorRGBA.White.mult(0.25f));
             floorTexturePath = "Textures/stone_bricks.png";
             wallTexturePath = "Textures/stone_bricks.png";
         }
-
-        Material floorMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        floorMaterial.setTexture("ColorMap", assetManager.loadTexture(floorTexturePath));
         
-        Material wallMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        wallMaterial.setTexture("ColorMap", assetManager.loadTexture(wallTexturePath));
+        rootNode.addLight(ambientLight);
+
+        Material floorMaterial = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        floorMaterial.setTexture("DiffuseMap", assetManager.loadTexture(floorTexturePath));
+        
+        Material wallMaterial = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        wallMaterial.setTexture("DiffuseMap", assetManager.loadTexture(wallTexturePath));
         
         //follows a right-handed coordinate system, go right and down to increase in j and i respectively
         float[][] maze = {{1, 1, 1, 1, 1, 1, 1},
