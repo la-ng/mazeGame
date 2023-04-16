@@ -8,6 +8,7 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -32,6 +33,7 @@ import com.simsilica.lemur.component.QuadBackgroundComponent;
 public class Main extends SimpleApplication implements ActionListener {
 
     private BulletAppState bulletAppState;
+    private AmbientLight ambientLight = new AmbientLight();
     private CharacterControl physicsCharacter;
     final private Vector3f walkDirection = new Vector3f(0,0,0);
     final private Vector3f viewDirection = new Vector3f(0,0,0);
@@ -81,8 +83,8 @@ public class Main extends SimpleApplication implements ActionListener {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
-        // init a physical test scene
-        coords = Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type);
+        // init maze
+        coords = Maze.createWorld(rootNode, assetManager, bulletAppState.getPhysicsSpace(), type, ambientLight);
         setupKeys();
 
         // Add a physics character to the world
@@ -155,9 +157,9 @@ public class Main extends SimpleApplication implements ActionListener {
             }
         });
         
-        Button buttonExit = myWindow.addChild(new Button("Quit Game"));
-        buttonExit.setInsets(new Insets3f(20f, 0, 0f, 0));
-        buttonExit.addClickCommands(new Command<Button>() {
+        Button buttonQuit = myWindow.addChild(new Button("Quit Game"));
+        buttonQuit.setInsets(new Insets3f(20f, 0, 0f, 0));
+        buttonQuit.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
                 app.stop();
@@ -172,7 +174,7 @@ public class Main extends SimpleApplication implements ActionListener {
         // Create a simple container for our elements
         Container myWindow = new Container();
         
-        QuadBackgroundComponent background = new QuadBackgroundComponent(ColorRGBA.DarkGray.setAlpha(0.5f), 10, 20);
+        QuadBackgroundComponent background = new QuadBackgroundComponent(ColorRGBA.DarkGray, 10, 20);
 
         
         myWindow.setBackground(background);
@@ -188,7 +190,7 @@ public class Main extends SimpleApplication implements ActionListener {
         labelLogo.setInsets(new Insets3f(0, 0, 50f, 0));
         labelLogo.setIcon(iconLogo);
         
-        Button buttonResume = myWindow.addChild(new Button("Resume Game"));
+        Button buttonResume = myWindow.addChild(new Button("Resume Maze"));
         buttonResume.setInsets(new Insets3f(0, 0, 20f, 0));
         buttonResume.addClickCommands(new Command<Button>() {
             @Override
@@ -199,7 +201,7 @@ public class Main extends SimpleApplication implements ActionListener {
             }
         });
         
-        Button buttonRestart = myWindow.addChild(new Button("Restart Game"));
+        Button buttonRestart = myWindow.addChild(new Button("Restart Maze"));
         buttonRestart.setInsets(new Insets3f(0, 0, 20f, 0));
         buttonRestart.addClickCommands(new Command<Button>() {
             @Override
@@ -211,7 +213,8 @@ public class Main extends SimpleApplication implements ActionListener {
             }
         });
         
-        Button buttonExit = myWindow.addChild(new Button("Exit Game"));
+        Button buttonExit = myWindow.addChild(new Button("Exit Maze"));
+        buttonExit.setInsets(new Insets3f(0, 0, 20f, 0));
         buttonExit.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
@@ -219,7 +222,17 @@ public class Main extends SimpleApplication implements ActionListener {
                 guiNode.detachChild(myWindow);
                 stateManager.detach(bulletAppState);
                 assetManager.clearCache();
+                rootNode.removeLight(ambientLight);
+                rootNode.detachAllChildren();
                 startMenu();
+            }
+        });
+        
+        Button buttonQuit = myWindow.addChild(new Button("Quit Game"));
+        buttonQuit.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                app.stop();
             }
         });
     }
@@ -306,6 +319,8 @@ public class Main extends SimpleApplication implements ActionListener {
                 gameRunning = false;
                 stateManager.detach(bulletAppState);
                 assetManager.clearCache();
+                rootNode.removeLight(ambientLight);
+                rootNode.detachAllChildren();
                 startMenu();
         }
     }
