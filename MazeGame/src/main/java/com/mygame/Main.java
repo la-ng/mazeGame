@@ -40,7 +40,6 @@ public class Main extends SimpleApplication implements ActionListener {
     private boolean gamePaused = false;
     static Main app;
     float[] coords = new float[4]; //brings back starting coords and finish coords
-    boolean restarted = false;
     
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
@@ -66,7 +65,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 new KeyTrigger(KeyInput.KEY_ESCAPE));
         inputManager.addListener(this, "Strafe Left", "Strafe Right");
         inputManager.addListener(this, "Walk Forward", "Walk Backward");
-        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         inputManager.addListener(this, "Pause");
         
         inputManager.setCursorVisible(false);
@@ -108,6 +106,8 @@ public class Main extends SimpleApplication implements ActionListener {
         // Initialize the globals access so that the defualt
         // components can find what they need.
         GuiGlobals.initialize(this);
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.deleteMapping("Pause"); //prevents you from pulling up pause menu while in the... start menu.
     
         // Create a simple container for our elements
         Container myWindow = new Container();
@@ -136,6 +136,7 @@ public class Main extends SimpleApplication implements ActionListener {
             @Override
             public void execute( Button source ) {
                 startGame("Deepslate");
+                gamePaused = false;
                 guiNode.detachChild(myWindow);
             }
         });
@@ -149,11 +150,12 @@ public class Main extends SimpleApplication implements ActionListener {
             @Override
             public void execute( Button source ) {
                 startGame("Stronghold");
+                gamePaused = false;
                 guiNode.detachChild(myWindow);
             }
         });
         
-        Button buttonExit = myWindow.addChild(new Button("Exit Game"));
+        Button buttonExit = myWindow.addChild(new Button("Quit Game"));
         buttonExit.setInsets(new Insets3f(20f, 0, 0f, 0));
         buttonExit.addClickCommands(new Command<Button>() {
             @Override
@@ -165,6 +167,7 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private void pauseMenu() {    
         inputManager.setCursorVisible(true);
+        gamePaused = true;
         
         // Create a simple container for our elements
         Container myWindow = new Container();
@@ -196,11 +199,27 @@ public class Main extends SimpleApplication implements ActionListener {
             }
         });
         
+        Button buttonRestart = myWindow.addChild(new Button("Restart Game"));
+        buttonRestart.setInsets(new Insets3f(0, 0, 20f, 0));
+        buttonRestart.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                gamePaused = false;
+                physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
+                guiNode.detachChild(myWindow);
+                inputManager.setCursorVisible(false);
+            }
+        });
+        
         Button buttonExit = myWindow.addChild(new Button("Exit Game"));
         buttonExit.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                app.stop();
+                gameRunning = false;
+                guiNode.detachChild(myWindow);
+                stateManager.detach(bulletAppState);
+                assetManager.clearCache();
+                startMenu();
             }
         });
     }
@@ -285,9 +304,8 @@ public class Main extends SimpleApplication implements ActionListener {
         if ((physicsCharacter.getPhysicsLocation().x <= (coords[2] + 1.0f)) && (physicsCharacter.getPhysicsLocation().x >= (coords[2] - 1.0f))
             && (physicsCharacter.getPhysicsLocation().z <= (coords[3] + 1.0f)) && (physicsCharacter.getPhysicsLocation().z >= (coords[3] - 1.0f))) {
                 gameRunning = false;
-                stateManager.cleanup();
-                physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
-                inputManager.clearMappings();
+                stateManager.detach(bulletAppState);
+                assetManager.clearCache();
                 startMenu();
         }
     }
