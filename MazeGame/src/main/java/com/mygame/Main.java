@@ -8,7 +8,6 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.math.Vector2f;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -38,6 +37,7 @@ public class Main extends SimpleApplication implements ActionListener {
     final private Vector3f viewDirection = new Vector3f(0,0,0);
     private boolean leftStrafe = false, rightStrafe = false, forward = false, backward = false;
     private boolean gameRunning = false;
+    private boolean gamePaused = false;
     static Main app;
     float[] coords = new float[4]; //brings back starting coords and finish coords
     boolean restarted = false;
@@ -62,9 +62,12 @@ public class Main extends SimpleApplication implements ActionListener {
                 new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Walk Backward", 
                 new KeyTrigger(KeyInput.KEY_S));
+        inputManager.addMapping("Pause", 
+                new KeyTrigger(KeyInput.KEY_ESCAPE));
         inputManager.addListener(this, "Strafe Left", "Strafe Right");
         inputManager.addListener(this, "Walk Forward", "Walk Backward");
-        inputManager.addListener(this, "Jump");
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.addListener(this, "Pause");
         
         inputManager.setCursorVisible(false);
     }
@@ -151,7 +154,49 @@ public class Main extends SimpleApplication implements ActionListener {
         });
         
         Button buttonExit = myWindow.addChild(new Button("Exit Game"));
-        buttonExit.setInsets(new Insets3f(0, 0, 0f, 0));
+        buttonExit.setInsets(new Insets3f(20f, 0, 0f, 0));
+        buttonExit.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                app.stop();
+            }
+        });
+    }
+    
+    private void pauseMenu() {    
+        inputManager.setCursorVisible(true);
+        
+        // Create a simple container for our elements
+        Container myWindow = new Container();
+        
+        QuadBackgroundComponent background = new QuadBackgroundComponent(ColorRGBA.DarkGray.setAlpha(0.5f), 10, 20);
+
+        
+        myWindow.setBackground(background);
+        guiNode.attachChildAt(myWindow, 0);
+            
+        // Put it somewhere that we will see it
+        // Note: Lemur GUI elements grow down from the upper left corner.
+        Vector3f pref = myWindow.getPreferredSize().mult(0.5f);
+        myWindow.setLocalTranslation(settings.getWidth() * 0.5f - 26f * pref.x, settings.getHeight() * 0.7f + pref.y, 0);
+        
+        IconComponent iconLogo = new IconComponent("Icons/mazegame_logo.png", 1f, 0, 0, 0, paused);
+        Label labelLogo = myWindow.addChild(new Label(""));
+        labelLogo.setInsets(new Insets3f(0, 0, 50f, 0));
+        labelLogo.setIcon(iconLogo);
+        
+        Button buttonResume = myWindow.addChild(new Button("Resume Game"));
+        buttonResume.setInsets(new Insets3f(0, 0, 20f, 0));
+        buttonResume.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute( Button source ) {
+                gamePaused = false;
+                guiNode.detachChild(myWindow);
+                inputManager.setCursorVisible(false);
+            }
+        });
+        
+        Button buttonExit = myWindow.addChild(new Button("Exit Game"));
         buttonExit.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
@@ -180,6 +225,16 @@ public class Main extends SimpleApplication implements ActionListener {
             case "Walk Backward":
                 backward = value;
                 break;
+            case "Pause":
+                if (!value) {
+                    gamePaused = !gamePaused;
+                    if (gamePaused) pauseMenu();
+                    else {
+                        guiNode.detachChildAt(0);
+                        inputManager.setCursorVisible(false);
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -188,6 +243,10 @@ public class Main extends SimpleApplication implements ActionListener {
     @Override
     public void simpleUpdate(float tpf) {
         if (!gameRunning) {
+            return;
+        }
+        
+        if (gamePaused) {
             return;
         }
         
