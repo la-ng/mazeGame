@@ -1,6 +1,8 @@
 package com.mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioData.DataType;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
@@ -33,7 +35,9 @@ import com.simsilica.lemur.component.QuadBackgroundComponent;
 public class Main extends SimpleApplication implements ActionListener {
 
     private BulletAppState bulletAppState;
-    private AmbientLight ambientLight = new AmbientLight();
+    final private AmbientLight ambientLight = new AmbientLight();
+    AudioNode buttonSound;
+    AudioNode gameMusic;
     private CharacterControl physicsCharacter;
     final private Vector3f walkDirection = new Vector3f(0,0,0);
     final private Vector3f viewDirection = new Vector3f(0,0,0);
@@ -77,6 +81,8 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     private void startGame(String type) {
+        gameMusic.play();
+        
         gameRunning = true;
         
         // activate physics
@@ -137,6 +143,7 @@ public class Main extends SimpleApplication implements ActionListener {
         buttonStartDeepslateMaze.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
+                buttonSound.play();
                 startGame("Deepslate");
                 gamePaused = false;
                 guiNode.detachChild(myWindow);
@@ -151,6 +158,7 @@ public class Main extends SimpleApplication implements ActionListener {
         buttonStartStrongholdMaze.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
+                buttonSound.play();
                 startGame("Stronghold");
                 gamePaused = false;
                 guiNode.detachChild(myWindow);
@@ -162,12 +170,15 @@ public class Main extends SimpleApplication implements ActionListener {
         buttonQuit.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
+                buttonSound.play();
                 app.stop();
             }
         });
     }
     
     private void pauseMenu() {    
+        gameMusic.pause();
+        
         inputManager.setCursorVisible(true);
         gamePaused = true;
         
@@ -195,9 +206,11 @@ public class Main extends SimpleApplication implements ActionListener {
         buttonResume.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
+                buttonSound.play();
                 gamePaused = false;
                 guiNode.detachChild(myWindow);
                 inputManager.setCursorVisible(false);
+                gameMusic.play();
             }
         });
         
@@ -206,10 +219,12 @@ public class Main extends SimpleApplication implements ActionListener {
         buttonRestart.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
+                buttonSound.play();
                 gamePaused = false;
                 physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
                 guiNode.detachChild(myWindow);
                 inputManager.setCursorVisible(false);
+                gameMusic.play();
             }
         });
         
@@ -218,6 +233,7 @@ public class Main extends SimpleApplication implements ActionListener {
         buttonExit.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
+                buttonSound.play();
                 gameRunning = false;
                 guiNode.detachChild(myWindow);
                 stateManager.detach(bulletAppState);
@@ -239,6 +255,14 @@ public class Main extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleInitApp() {
+        buttonSound = new AudioNode(assetManager, "Sound/menu_button.wav");
+        buttonSound.setVolume(0.4f);
+        buttonSound.setPositional(false);
+        buttonSound.setDirectional(false);
+        gameMusic = new AudioNode(assetManager, "Sound/game_music.wav", DataType.Stream);
+        gameMusic.setPositional(false);
+        gameMusic.setDirectional(false);
+        gameMusic.setLooping(true);
         startMenu();
         setDisplayFps(false);
         setDisplayStatView(false);
@@ -266,6 +290,7 @@ public class Main extends SimpleApplication implements ActionListener {
                     else {
                         guiNode.detachChildAt(0);
                         inputManager.setCursorVisible(false);
+                        gameMusic.play();
                     }
                 }
                 break;
