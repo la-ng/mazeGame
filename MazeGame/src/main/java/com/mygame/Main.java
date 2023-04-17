@@ -343,6 +343,7 @@ public class Main extends SimpleApplication implements ActionListener {
         //finish coordinates. currently stuck here rn
         if ((physicsCharacter.getPhysicsLocation().x <= (coords[2] + 1.0f)) && (physicsCharacter.getPhysicsLocation().x >= (coords[2] - 1.0f))
             && (physicsCharacter.getPhysicsLocation().z <= (coords[3] + 1.0f)) && (physicsCharacter.getPhysicsLocation().z >= (coords[3] - 1.0f))) {
+                gameMusic.stop();
                 gameRunning = false;
                 stateManager.detach(bulletAppState);
                 assetManager.clearCache();
