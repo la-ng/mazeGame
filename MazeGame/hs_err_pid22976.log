@@ -1,0 +1,199 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 266338304 bytes for Failed to commit area from 0x0000000702400000 to 0x0000000712200000 of length 266338304.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (./src/hotspot/os/windows/os_windows.cpp:3386), pid=22976, tid=3992
+#
+# JRE version:  (11.0.17+8) (build )
+# Java VM: OpenJDK 64-Bit Server VM (11.0.17+8, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dfile.encoding=windows-1252 -Duser.country=US -Duser.language=en -Duser.variant com.mygame.Main
+
+Host: AMD Ryzen 7 5800H with Radeon Graphics         , 16 cores, 15G,  Windows 11 , 64 bit Build 22621 (10.0.22621.1485)
+Time: Sun Apr 16 15:36:46 2023 Eastern Daylight Time elapsed time: 0.065082 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000002b817af5800):  JavaThread "Unknown thread" [_thread_in_vm, id=3992, stack(0x000000edd7c00000,0x000000edd7d00000)]
+
+Stack: [0x000000edd7c00000,0x000000edd7d00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x61f5ba]
+V  [jvm.dll+0x7abf79]
+V  [jvm.dll+0x7ad668]
+V  [jvm.dll+0x7add43]
+V  [jvm.dll+0x24fd88]
+V  [jvm.dll+0x61c8ca]
+V  [jvm.dll+0x611055]
+V  [jvm.dll+0x307ccc]
+V  [jvm.dll+0x307b52]
+V  [jvm.dll+0x30c866]
+V  [jvm.dll+0x352caf]
+V  [jvm.dll+0x3526e0]
+V  [jvm.dll+0x2e4cd8]
+V  [jvm.dll+0x2e5e36]
+V  [jvm.dll+0x785db7]
+V  [jvm.dll+0x78753f]
+V  [jvm.dll+0x35fa29]
+V  [jvm.dll+0x768d20]
+V  [jvm.dll+0x3cd54f]
+V  [jvm.dll+0x3cf8e1]
+C  [jli.dll+0x5207]
+C  [ucrtbase.dll+0x29363]
+C  [KERNEL32.DLL+0x1269d]
+C  [ntdll.dll+0x5a9f8]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x000002b8159215d0, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x000002b817b0f800 GCTaskThread "GC Thread#0" [stack: 0x000000edd7d00000,0x000000edd7e00000] [id=23828]
+  0x000002b817b6d800 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000edd7e00000,0x000000edd7f00000] [id=25608]
+  0x000002b817b71800 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000edd7f00000,0x000000edd8000000] [id=760]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ff91a5444a7]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x000002b817af32b0] Heap_lock - owner thread: 0x000002b817af5800
+
+Heap address: 0x0000000702400000, size: 4060 MB, Compressed Oops mode: Non-zero based: 0x0000000702400000
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (1 events):
+Event: 0.006 Loaded shared library C:\Program Files\jmonkeyplatform\jdk\bin\zip.dll
+
+
+Dynamic libraries:
+0x00007ff67d8b0000 - 0x00007ff67d8bd000 	C:\Program Files\jmonkeyplatform\jdk\bin\java.exe
+0x00007ff99e930000 - 0x00007ff99eb44000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff99c9f0000 - 0x00007ff99cab2000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff99bfd0000 - 0x00007ff99c36c000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff99c370000 - 0x00007ff99c481000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff9895f0000 - 0x00007ff989607000 	C:\Program Files\jmonkeyplatform\jdk\bin\jli.dll
+0x00007ff996b50000 - 0x00007ff996b65000 	C:\Program Files\jmonkeyplatform\jdk\bin\VCRUNTIME140.dll
+0x00007ff99d580000 - 0x00007ff99d72b000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff985290000 - 0x00007ff98551e000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.608_none_a9444ca7c10bb01d\COMCTL32.dll
+0x00007ff99c5f0000 - 0x00007ff99c616000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff99d7e0000 - 0x00007ff99d887000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff99d3d0000 - 0x00007ff99d3f9000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff99c620000 - 0x00007ff99c733000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff99c490000 - 0x00007ff99c52a000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff99ce20000 - 0x00007ff99ce51000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ff9527f0000 - 0x00007ff95288b000 	C:\Program Files\jmonkeyplatform\jdk\bin\msvcp140.dll
+0x00007ff91a250000 - 0x00007ff91add2000 	C:\Program Files\jmonkeyplatform\jdk\bin\server\jvm.dll
+0x00007ff99d730000 - 0x00007ff99d7de000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff99cce0000 - 0x00007ff99cd84000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff99c7a0000 - 0x00007ff99c8b7000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff99e550000 - 0x00007ff99e558000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ff994200000 - 0x00007ff994234000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff996c80000 - 0x00007ff996c89000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ff993f10000 - 0x00007ff993f1a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ff99cda0000 - 0x00007ff99ce11000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff99ade0000 - 0x00007ff99adf8000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ff996c10000 - 0x00007ff996c20000 	C:\Program Files\jmonkeyplatform\jdk\bin\verify.dll
+0x00007ff9999b0000 - 0x00007ff999bde000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ff99e560000 - 0x00007ff99e8e9000 	C:\WINDOWS\System32\combase.dll
+0x00007ff99da30000 - 0x00007ff99db07000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ff9818c0000 - 0x00007ff9818f2000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ff99bde0000 - 0x00007ff99be5b000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ff9749b0000 - 0x00007ff9749d8000 	C:\Program Files\jmonkeyplatform\jdk\bin\java.dll
+0x00007ff992970000 - 0x00007ff99297a000 	C:\Program Files\jmonkeyplatform\jdk\bin\jimage.dll
+0x00007ff989060000 - 0x00007ff989078000 	C:\Program Files\jmonkeyplatform\jdk\bin\zip.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\jmonkeyplatform\jdk\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.608_none_a9444ca7c10bb01d;C:\Program Files\jmonkeyplatform\jdk\bin\server
+
+VM Arguments:
+jvm_args: -Dfile.encoding=windows-1252 -Duser.country=US -Duser.language=en -Duser.variant 
+java_command: com.mygame.Main
+java_class_path (initial): C:\Users\lawng\OneDrive\Documents\MazeGame\build\classes\java\main;C:\Users\lawng\OneDrive\Documents\MazeGame\build\resources\main;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-lwjgl3\3.5.2-stable\4a70f0eb4303932dca19b446d0d98180119db65c\jme3-lwjgl3-3.5.2-stable.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-desktop\3.5.2-stable\6be4993757c111613635bcaa646066a79a57426a\jme3-desktop-3.5.2-stable.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-jogg\3.5.2-stable\894b7354ba55138996ccaff92bda91abfdbaaa9a\jme3-jogg-3.5.2-stable.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-plugins\3.5.2-stable\e98a90b5b5267759a1e20d4e61c1acdbc43114f9\jme3-plugins-3.5.2-stable.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\com.simsilica\lemur\1.16.0\8e4af305c8c00dde11db8d76be8debd5ee751c09\lemur-1.16.0.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-jbullet\3.5.2-stable\2097bfd51052e0a6e5e621ae2800e426c4100c61\jme3-jbullet-3.5.2-stable.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-terrain\3.5.2-stable\fb42ea5f5e3aa5fda848072796af61bf6126104b\jme3-terrain-3.5.2-stable.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.jmonkeyengine\jme3-core\3.5.2-stable\fe2b20c9d088d1d2bcbe08abba9311df2f2dee7a\jme3-core-3.5.2-stable.jar;C:\Users\lawng\OneDrive\Documents\MazeGame\build\assets\libs\assets.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-glfw\3.3.1\cbac1b8d30cb4795149c1ef540f912671a8616d0\lwjgl-glfw-3.3.1.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-glfw\3.3.1\ed892f945cf7e79c8756796f32d00fa4ceaf573b\lwjgl-glfw-3.3.1-natives-windows.jar;C:\Users\lawng\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-glfw\3.3.1\b997e3391d6ce8f05487e7335d95c606043884a1\lwjgl-glfw-3.3.1-natives-windows-x86.jar;C:\Users\lawng\.gradle\caches\modules-2
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 1048576                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 266338304                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 4257218560                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 1048576                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 7594288                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122031976                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122031976                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+     bool UseCompressedClassPointers               = true                                 {lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                                 {lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\jmonkeyplatform\jdk
+PATH=C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.362-1\bin;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.362-1\jre\bin;C:\Users\lawng\AppData\Local\Microsoft\WindowsApps;C:\Users\lawng\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\lawng\AppData\Local\GitHubDesktop\bin;C:\msys64\mingw64\bin;
+USERNAME=lawng
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+TMP=C:\Users\lawng\AppData\Local\Temp
+TEMP=C:\Users\lawng\AppData\Local\Temp
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 11 , 64 bit Build 22621 (10.0.22621.1485)
+OS uptime: 0 days 15:50 hours
+Hyper-V role detected
+
+CPU:total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 80 stepping 0 microcode 0x0, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, mmxext, 3dnowpref, lzcnt, sse4a, ht, tsc, tscinvbit, tscinv, bmi1, bmi2, adx, sha, fma
+
+Memory: 4k page, system-wide physical 16236M (5286M free)
+TotalPageFile size 20310M (AvailPageFile size 91M)
+current process WorkingSet (physical memory assigned to process): 11M, peak: 11M
+current process commit charge ("private bytes"): 71M, peak: 325M
+
+vm_info: OpenJDK 64-Bit Server VM (11.0.17+8) for windows-amd64 JRE (11.0.17+8), built on Oct 19 2022 00:04:05 by "" with MS VC++ 15.9 (VS2017)
+
+END.
