@@ -100,7 +100,7 @@ public class Main extends SimpleApplication implements ActionListener {
         // set forward camera node that follows the character
         CameraNode camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0.0f, 1.0f,-1.0f));
+        camNode.setLocalTranslation(new Vector3f(0.0f, 1.5f,-1.0f));
         characterNode.attachChild(camNode);
     }
     
@@ -240,6 +240,8 @@ public class Main extends SimpleApplication implements ActionListener {
     @Override
     public void simpleInitApp() {
         startMenu();
+        setDisplayFps(false);
+        setDisplayStatView(false);
     }
     
     @Override
