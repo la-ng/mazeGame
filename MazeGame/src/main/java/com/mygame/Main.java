@@ -96,20 +96,23 @@ public class Main extends SimpleApplication implements ActionListener {
         setupKeys();
 
         // Add a physics character to the world
-        physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.75f, 1.8f), .1f);
+        physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.75f, 1.2f), .1f);
         physicsCharacter.setPhysicsLocation(new Vector3f(0, 1.0f, 0.0f));
         Node characterNode = new Node("character node");
         characterNode.addControl(physicsCharacter);
         bulletAppState.getPhysicsSpace().add(physicsCharacter);
         rootNode.attachChild(characterNode);
         //teleports the player to a specific location, this is going to be EXTREMELY useful with starting locations
-        physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
+        physicsCharacter.setPhysicsLocation(new Vector3f(coords[0], 1.0f, coords[1]));
 
         // set forward camera node that follows the character
         CameraNode camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0.0f, 1.5f,-1.0f));
+        camNode.setLocalTranslation(new Vector3f(0.0f, 1.5f,0f));
         characterNode.attachChild(camNode);
+        
+        cam.setFrustumNear(0.3f);
+        cam.setFov(90f);
     }
     
     private void startMenu() {
@@ -223,7 +226,8 @@ public class Main extends SimpleApplication implements ActionListener {
             public void execute( Button source ) {
                 buttonSound.play();
                 gamePaused = false;
-                physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
+                physicsCharacter.setPhysicsLocation(new Vector3f(coords[0], 1.0f, coords[1]));
+
                 guiNode.detachChild(myWindow);
                 inputManager.setCursorVisible(false);
                 gameMusic.play();
@@ -336,6 +340,7 @@ public class Main extends SimpleApplication implements ActionListener {
         physicsCharacter.setViewDirection(viewDirection);
         
         checkForFinish(coords);
+        System.out.println(cam.getFov());
     }
 
     @Override
