@@ -15,7 +15,7 @@ repositories {
 }
 
 project.ext {
-  jmeVer = '3.5.2-stable'
+  jmeVer = '3.6.0-stable'
 }
 
 project(":assets") {
@@ -28,6 +28,12 @@ project(":assets") {
             resources {
                 srcDir '.'
             }
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 }
@@ -47,7 +53,7 @@ dependencies {
   implementation "com.simsilica:lemur:1.16.0"
   
   // Physics Library
-  implementation "org.jmonkeyengine:jme3-jbullet:$jmeVer"
+  implementation "com.github.stephengold:Minie:7.5.0"
 
   // Additional Libraries
 
@@ -59,4 +65,14 @@ jar {
     manifest {
         attributes 'Main-Class': "$mainClassName"
     }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+wrapper {
+    gradleVersion = '7.6'
 }
