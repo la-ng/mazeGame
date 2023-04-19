@@ -4,7 +4,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.KeyInput;
@@ -26,6 +25,8 @@ import com.simsilica.lemur.Insets3f;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.component.IconComponent;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -39,6 +40,8 @@ public class Main extends SimpleApplication implements ActionListener {
     AudioNode buttonSound;
     AudioNode gameMusic;
     private CharacterControl physicsCharacter;
+    final private Vector3f camDir = new Vector3f();
+    final private Vector3f camLeft = new Vector3f();
     final private Vector3f walkDirection = new Vector3f(0,0,0);
     final private Vector3f viewDirection = new Vector3f(0,0,0);
     private boolean leftStrafe = false, rightStrafe = false, forward = false, backward = false;
@@ -50,7 +53,10 @@ public class Main extends SimpleApplication implements ActionListener {
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setTitle("Maze Game");
-        settings.setResolution(1600, 900);
+        settings.setVSync(true);
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        settings.setResolution(gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
+        settings.setFullscreen(true);
         
         app = new Main();
         app.setShowSettings(false);
@@ -76,10 +82,6 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.setCursorVisible(false);
     }
     
-    private PhysicsSpace getPhysicsSpace() {
-        return bulletAppState.getPhysicsSpace();
-    }
-    
     private void startGame(String type) {
         gameMusic.play();
         
@@ -98,7 +100,7 @@ public class Main extends SimpleApplication implements ActionListener {
         physicsCharacter.setPhysicsLocation(new Vector3f(0, 1.0f, 0.0f));
         Node characterNode = new Node("character node");
         characterNode.addControl(physicsCharacter);
-        getPhysicsSpace().add(physicsCharacter);
+        bulletAppState.getPhysicsSpace().add(physicsCharacter);
         rootNode.attachChild(characterNode);
         //teleports the player to a specific location, this is going to be EXTREMELY useful with starting locations
         physicsCharacter.warp(new Vector3f(coords[0], 1.0f, coords[1]));
@@ -255,7 +257,7 @@ public class Main extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleInitApp() {
-        buttonSound = new AudioNode(assetManager, "Sound/menu_button.wav");
+        buttonSound = new AudioNode(assetManager, "Sound/menu_button.wav", DataType.Buffer);
         buttonSound.setVolume(0.4f);
         buttonSound.setPositional(false);
         buttonSound.setDirectional(false);
@@ -309,8 +311,10 @@ public class Main extends SimpleApplication implements ActionListener {
             return;
         }
         
-        Vector3f camDir = cam.getDirection().mult(0.2f);
-        Vector3f camLeft = cam.getLeft().mult(0.2f);
+        camDir.set(cam.getDirection().mult(0.2f));
+        camLeft.set(cam.getLeft().mult(0.2f));
+        camDir.y = 0;
+        camLeft.y = 0;
         viewDirection.set(camDir);
         walkDirection.set(0, 0, 0);
         
