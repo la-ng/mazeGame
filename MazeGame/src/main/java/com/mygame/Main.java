@@ -96,7 +96,7 @@ public class Main extends SimpleApplication implements ActionListener {
         setupKeys();
 
         // Add a physics character to the world
-        physicsCharacter = new CharacterControl(new CapsuleCollisionShape(0.5f, 1.8f), .1f);
+        physicsCharacter = new CharacterControl(new CapsuleCollisionShape(1f, 1.8f), .1f);
         physicsCharacter.setPhysicsLocation(new Vector3f(0, 1.0f, 0.0f));
         Node characterNode = new Node("character node");
         characterNode.addControl(physicsCharacter);
