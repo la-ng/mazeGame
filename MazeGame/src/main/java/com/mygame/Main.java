@@ -271,8 +271,8 @@ public class Main extends SimpleApplication implements ActionListener {
         gameMusic.setDirectional(false);
         gameMusic.setLooping(true);
         goalSound = new AudioNode(assetManager, "Sound/goal.wav", DataType.Buffer);
-        buttonSound.setVolume(0.5f);
-		goalSound.setPositional(false);
+        goalSound.setVolume(0.5f);
+	goalSound.setPositional(false);
         goalSound.setDirectional(false);
         startMenu();
         setDisplayFps(false);
