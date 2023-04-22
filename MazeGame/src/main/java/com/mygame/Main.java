@@ -39,6 +39,7 @@ public class Main extends SimpleApplication implements ActionListener {
     final private AmbientLight ambientLight = new AmbientLight();
     AudioNode buttonSound;
     AudioNode gameMusic;
+    AudioNode goalSound;
     private CharacterControl physicsCharacter;
     final private Vector3f camDir = new Vector3f();
     final private Vector3f camLeft = new Vector3f();
@@ -269,6 +270,10 @@ public class Main extends SimpleApplication implements ActionListener {
         gameMusic.setPositional(false);
         gameMusic.setDirectional(false);
         gameMusic.setLooping(true);
+        goalSound = new AudioNode(assetManager, "Sound/goal.wav", DataType.Buffer);
+        buttonSound.setVolume(0.5f);
+		goalSound.setPositional(false);
+        goalSound.setDirectional(false);
         startMenu();
         setDisplayFps(false);
         setDisplayStatView(false);
@@ -352,6 +357,7 @@ public class Main extends SimpleApplication implements ActionListener {
         if ((physicsCharacter.getPhysicsLocation().x <= (coords[2] + 1.0f)) && (physicsCharacter.getPhysicsLocation().x >= (coords[2] - 1.0f))
             && (physicsCharacter.getPhysicsLocation().z <= (coords[3] + 1.0f)) && (physicsCharacter.getPhysicsLocation().z >= (coords[3] - 1.0f))) {
                 gameMusic.stop();
+                goalSound.play();
                 gameRunning = false;
                 stateManager.detach(bulletAppState);
                 assetManager.clearCache();
