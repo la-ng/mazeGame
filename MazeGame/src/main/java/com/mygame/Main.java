@@ -319,7 +319,7 @@ public class Main extends SimpleApplication implements ActionListener {
         if (gamePaused) {
             return;
         }
-        
+       
         camDir.set(cam.getDirection().mult(0.2f));
         camLeft.set(cam.getLeft().mult(0.2f));
         camDir.y = 0;
