@@ -117,9 +117,6 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     private void startMenu() {
-        // Initialize the globals access so that the defualt
-        // components can find what they need.
-        GuiGlobals.initialize(this);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         inputManager.deleteMapping("Pause"); //prevents you from pulling up pause menu while in the... start menu.
     
@@ -274,6 +271,9 @@ public class Main extends SimpleApplication implements ActionListener {
         goalSound.setVolume(0.4f);
 	goalSound.setPositional(false);
         goalSound.setDirectional(false);
+	// Initialize the globals access so that the defualt
+        // components can find what they need.
+        GuiGlobals.initialize(this);
         startMenu();
         setDisplayFps(false);
         setDisplayStatView(false);
