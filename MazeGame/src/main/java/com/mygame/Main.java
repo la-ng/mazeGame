@@ -363,6 +363,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 assetManager.clearCache();
                 rootNode.removeLight(ambientLight);
                 rootNode.detachAllChildren();
+		inputManager.setCursorVisible(true);
                 startMenu();
         }
     }
