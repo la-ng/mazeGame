@@ -1,6 +1,2 @@
 # mazeGame
-A work in progress, I don't know anymore.
-
-To-do:
-- Game logic: maze designs (maybe some smaller maps for tutorial purposes).
-- Factor some Glowstone blocks into the maps and attach light sources to them.
+A simple 3D maze game built in the JMonkeyEngine game engine using their own custom JMonkeyEngine SDK (an IDE based on NetBeans). Features two maps of varying difficulty.
